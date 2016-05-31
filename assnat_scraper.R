@@ -1,11 +1,11 @@
 #!/usr/bin/env Rscript
 # ------------------------------------------------------------------------------
-# Title:        Assnat network scraper
+# Title:        Assnat Dynasty
 # Filename:     assnat_scraper.R
-# Description:  TODO: (write me)
+# Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-05-26 17:56:55
+# Modified:     2016-06-01 01:09:58
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
