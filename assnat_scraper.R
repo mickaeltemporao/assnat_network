@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-06-01 01:09:58
+# Modified:     2016-06-15 10:05:13
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -28,24 +28,3 @@ for (i in letters) {
 
 test <- url %>%
   html_nodes('//*[@id="Wrap"]/div[8]')
-
-
-  html_text() %>%
-  as.numeric()
-rating
-#> [1] 7.8
-
-cast <- lego_movie %>%
-  html_nodes("#titleCast .itemprop span") %>%
-  html_text()
-cast
-#>  [1] "Will Arnett"     "Elizabeth Banks" "Craig Berry"
-#>  [4] "Alison Brie"     "David Burrows"   "Anthony Daniels"
-#>  [7] "Charlie Day"     "Amanda Farinos"  "Keith Ferguson"
-#> [10] "Will Ferrell"    "Will Forte"      "Dave Franco"
-#> [13] "Morgan Freeman"  "Todd Hansen"     "Jonah Hill"
-
-poster <- lego_movie %>%
-  html_nodes("#img_primary img") %>%
-  html_attr("src")
-poster
