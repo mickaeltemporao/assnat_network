@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-07-05 20:37:37
+# Modified:     2016-07-05 21:52:25
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -23,7 +23,7 @@ az_urls <- url %>%
   paste0(base, .) %>%
   .[-1]
 
-letters <- lapply(az_urls, read_html)
+page_names <- lapply(az_urls, read_html)
+test <- page_names[[2]]
 
-url %>%
-  html_nodes('//*[@id="Wrap"]/div[8]')
+test %>% html_nodes('.imbGauche div a') %>% html_text
