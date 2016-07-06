@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-06-15 10:05:13
+# Modified:     2016-07-05 20:37:37
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -13,18 +13,17 @@
 # ------------------------------------------------------------------------------
 
 library(rvest)
+
 base <- 'http://www.assnat.qc.ca'
 url <- read_html('http://www.assnat.qc.ca/fr/membres/notices/index.html')
-letters <- url %>%
+
+az_urls <- url %>%
   html_nodes("p a") %>%
-  html_attr('href')
-letters <- letters[2:length(letters)]
+  html_attr('href') %>%
+  paste0(base, .) %>%
+  .[-1]
 
-pages <- data.frame()
-#i <- letters[1]
-for (i in letters) {
-  pages[i,] <- read_html(paste0(base,i))
-}
+letters <- lapply(az_urls, read_html)
 
-test <- url %>%
+url %>%
   html_nodes('//*[@id="Wrap"]/div[8]')
