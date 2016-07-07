@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-07-06 22:43:13
+# Modified:     2016-07-07 14:10:17
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -36,12 +36,15 @@ for (i in 1:length(page_names)) {
   output <- rbind(output, temp)
 }
 
+# Extract HTML Content each MP Personal Page
+mp_pages <- lapply(head(output$mp_urls), read_html)
+
 # Extract YOB & YOD
+year <- NULL
 foo <- function (x) {
-  temp <- read_html(x) %>%
-  html_nodes('.sansMarge') %>%
+  temp <- x %>% html_nodes('.sansMarge') %>%
   html_text
   return(temp)
 }
 
-year <- sapply(output$mp_urls, foo)
+year <- lapply(mp_pages, foo)
