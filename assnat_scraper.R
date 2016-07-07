@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-07-06 22:23:46
+# Modified:     2016-07-06 22:42:15
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -26,11 +26,24 @@ az_urls <- url %>%
 page_names <- lapply(az_urls, read_html)
 test <-
 
+# Get MP Names & URLS
 output <- NULL
 for (i in 1:length(page_names)) {
   page_i <- page_names[[i]]
   mp_names <- page_i %>% html_nodes('.imbGauche div a') %>% html_text
   mp_urls <- page_i %>% html_nodes('.imbGauche div a') %>% html_attr('href') %>% paste0(base, .)
-  temp <- data.frame(mp_names, mp_urls)
+  temp <- data.frame(mp_names, mp_urls, stringsAsFactors=F)
   output <- rbind(output, temp)
 }
+test <- output$mp_urls[1]
+
+# Extract YOB & YOD
+
+foo <- function (x) {
+  temp <- read_html(x) %>%
+  html_nodes('.sansMarge') %>%
+  html_text
+  return(temp)
+}
+
+year <- sapply(output$mp_urls, foo)
