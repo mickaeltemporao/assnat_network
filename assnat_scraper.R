@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-07-27 17:59:17
+# Modified:     2016-07-27 18:01:31
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -47,3 +47,6 @@ foo <- function (x) {
 }
 
 year <- sapply(mp_pages, foo)
+
+# Extract descriptions
+# Extract DTMs
