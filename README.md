@@ -6,6 +6,7 @@ http://www.assnat.qc.ca
 ## Fields to extract
 - First Name
 - Last Name
+- GENDER
 - YOB
 - YOD
 - Description
