@@ -10,4 +10,5 @@ http://www.assnat.qc.ca
 - YOB
 - YOD
 - Description
+- Party
 - Relatives

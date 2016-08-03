@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-07-27 20:18:26
+# Modified:     2016-08-01 21:19:24
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -14,7 +14,7 @@
 
 library(rvest)
 
-scrape <- FALSE
+scrape <- TRUE
 base <- 'http://www.assnat.qc.ca'
 url <- read_html('http://www.assnat.qc.ca/fr/membres/notices/index.html')
 
@@ -26,7 +26,6 @@ az_urls <- url %>%
 
 if (scrape == T) {
 page_names <- lapply(az_urls, read_html)
-
 # Get MP Names & URLS
 output <- NULL
 for (i in 1:length(page_names)) {
@@ -42,7 +41,7 @@ mp_pages <- lapply(output$mp_urls, read_html)
 save(mp_pages, file="mp_pages.RData")
 }
 
-mp_pages <- load("data/mp_pages.RData")
+load("data/mp_pages.RData")
 
 # Extract YOB & YOD
 year <- NULL
