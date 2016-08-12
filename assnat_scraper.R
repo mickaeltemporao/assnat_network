@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-08-11 22:37:22
+# Modified:     2016-08-11 22:43:22
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -60,12 +60,11 @@ bar <- function (x) {
 ifelse(identical(x, character(0)), NA, x)
 }
 
+# Extracting Year Variables
 year_str <- '.sansMarge'
 year <- sapply(mp_pages, foo, year_str)
-temp <- sapply(year, bar)
-temp <- unlist(year)
-temp <- as.numeric(as.character(year))
-temp <- iconv(year, to="ASCII//TRANSLIT")
+year <- sapply(year, bar)
+year <- iconv(year, to="ASCII//TRANSLIT")
 year <- chartr("`'", "  ", year)
 year <- gsub('[a-zA-Z]', '', year)
 year <- gsub(' ', '', year)
@@ -73,6 +72,9 @@ yob <- as.numeric(substr(year, 2,5))
 yod <- ifelse(substr_r(year, 2)=='.)', NA, substr_r(year, 5))
 yod <- gsub(')', '', yod)
 yod <- as.numeric(yod)
+output$yob <- yob
+output$yod <- yod
+rm(yob, yod)
 
 
 
