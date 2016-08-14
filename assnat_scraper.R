@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-08-12 05:56:03
+# Modified:     2016-08-14 19:53:22
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -17,7 +17,7 @@ scrape <- T
 
 if (scrape == T) {
 base <- 'http://www.assnat.qc.ca'
-url <- read_html('http://www.assnat.qc.ca/fr/membres/notices/index.html')
+url  <- read_html('http://www.assnat.qc.ca/fr/membres/notices/index.html')
 
 az_urls <- url %>%
   html_nodes("p a") %>%
@@ -28,17 +28,17 @@ az_urls <- url %>%
 page_names <- lapply(az_urls, read_html)
 
 # Get MP Names & URLS
-temp <- NULL
-output <- NULL
-for (i in 1:length(page_names)) {
-  page_i <- page_names[[i]]
-  mp_name <- page_i %>% html_nodes('.imbGauche div a') %>% html_text
-  mp_url <- page_i %>% html_nodes('.imbGauche div a') %>% html_attr('href') %>% paste0(base, .)
-  temp <- data.frame(mp_name, mp_url, stringsAsFactors=F)
-  output <- rbind(output, temp)
+temp           <- NULL
+output         <- NULL
+for(i in 1:length(page_names)) {
+  page_i       <- page_names[[i]]
+  mp_name      <- page_i %>% html_nodes('.imbGauche div a') %>% html_text
+  mp_url       <- page_i %>% html_nodes('.imbGauche div a') %>% html_attr('href') %>% paste0(base, .)
+  temp         <- data.frame(mp_name, mp_url, stringsAsFactors=F)
+  output       <- rbind(output, temp)
 }
 # Extract HTML Content for each MP Personal Page
-mp_pages <- lapply(output$mp_url, read_html)
+mp_pages       <- lapply(output$mp_url, read_html)
 # Save mp_pages
 save(mp_pages, file="data/mp_pages.RData")
 }
@@ -47,14 +47,14 @@ load("data/mp_pages.RData")
 
 #TODO: rename funs
 # Extract YOB & YOD
-year <- NULL
-foo <- function (x, search_str) {
+year   <- NULL
+foo    <- function (x, search_str) {
   temp <- x %>% html_nodes(search_str) %>%
   html_text
   return(temp)
 }
 
-substr_r<- function(x, n){
+substr_r <- function(x, n){
   substr(x, nchar(x)-n+1, nchar(x))
 }
 
@@ -63,20 +63,20 @@ ifelse(identical(x, character(0)), NA, x)
 }
 
 # Extracting Year Variables
-year_str <- '.sansMarge'
-year <- sapply(mp_pages, foo, year_str)
-year <- sapply(year, bar)
-year <- iconv(year, to="ASCII//TRANSLIT")
-year <- chartr("`'", "  ", year)
-year <- gsub('[a-zA-Z]', '', year)
-year <- gsub(' ', '', year)
-yob <- as.numeric(substr(year, 2,5))
-yod <- ifelse(substr_r(year, 2)=='.)', NA, substr_r(year, 5))
-yod <- gsub(')', '', yod)
-yod <- as.numeric(yod)
+year_str   <- '.sansMarge'
+year       <- sapply(mp_pages, foo, year_str)
+year       <- sapply(year, bar)
+year       <- iconv(year, to="ASCII//TRANSLIT")
+year       <- chartr("`'", "  ", year)
+year       <- gsub('[a-zA-Z]', '', year)
+year       <- gsub(' ', '', year)
+yob        <- as.numeric(substr(year, 2,5))
+yod        <- ifelse(substr_r(year, 2)=='.)', NA, substr_r(year, 5))
+yod        <- gsub(')', '', yod)
+yod        <- as.numeric(yod)
 output$yob <- yob
 output$yod <- yod
-rm(year, year_str, yob, yod)
+rm(year,   year_str, yob, yod)
 #TODO: get year for similars to output[2540,]
 
 # Extraction of Gender Variable
@@ -84,12 +84,11 @@ bar <- function (x) {
 ifelse(identical(substr(x,1,3), 'Née'), 1, 0)
 }
 
-gender_str <- 'h2+ p'
-gender <- sapply(mp_pages, foo, gender_str)
-gender <- sapply(gender, bar)
+gender_str    <- 'h2+ p'
+gender        <- sapply(mp_pages,foo,gender_str)
+gender        <- sapply(gender, bar)
 output$female <- gender
-rm(gender, gender_str, temp)
-
+rm(gender,gender_str,temp)
 
 #TODO: extract gender
 #TODO: extract party
