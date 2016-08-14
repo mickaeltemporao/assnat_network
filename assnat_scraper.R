@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-08-11 22:43:22
+# Modified:     2016-08-12 05:56:03
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -40,10 +40,10 @@ for (i in 1:length(page_names)) {
 # Extract HTML Content for each MP Personal Page
 mp_pages <- lapply(output$mp_url, read_html)
 # Save mp_pages
-save(mp_pages, file="mp_pages.RData")
+save(mp_pages, file="data/mp_pages.RData")
 }
 
-#load("data/mp_pages.RData")
+load("data/mp_pages.RData")
 
 #TODO: rename funs
 # Extract YOB & YOD
@@ -53,9 +53,11 @@ foo <- function (x, search_str) {
   html_text
   return(temp)
 }
+
 substr_r<- function(x, n){
   substr(x, nchar(x)-n+1, nchar(x))
 }
+
 bar <- function (x) {
 ifelse(identical(x, character(0)), NA, x)
 }
@@ -74,12 +76,22 @@ yod <- gsub(')', '', yod)
 yod <- as.numeric(yod)
 output$yob <- yob
 output$yod <- yod
-rm(yob, yod)
+rm(year, year_str, yob, yod)
+#TODO: get year for similars to output[2540,]
 
-
+# Extraction of Gender Variable
+bar <- function (x) {
+ifelse(identical(substr(x,1,3), 'Née'), 1, 0)
+}
 
 gender_str <- 'h2+ p'
-gender <- sapply(mp_pages, foo, gender_str) %>% unlist()
+gender <- sapply(mp_pages, foo, gender_str)
+gender <- sapply(gender, bar)
+output$female <- gender
+rm(gender, gender_str, temp)
 
+
+#TODO: extract gender
+#TODO: extract party
 #TODO: extract descriptions
 #TODO: extract DTMs
