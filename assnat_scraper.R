@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-08-17 16:51:27
+# Modified:     2016-08-17 16:54:24
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -41,10 +41,6 @@ if (scrape == T) {
   }
   # Extract HTML Content for each MP Personal Page
   mp_pages <- lapply(output$mp_url, read_html)
-} else {
-    output <- read.csv('data/output.csv')
-}
-
 # Extracting Year Variables -----------------------------------------------
 #TODO: rename funs
 year   <- NULL
@@ -74,7 +70,6 @@ output$yob <- yob
 output$yod <- yod
 rm(year,   year_str, yob, yod)
 #TODO: get year for similars to output[2540,]
-
 # Extraction of Gender Variable -------------------------------------------
 bar <- function (x) {
 ifelse(identical(substr(x,1,3), 'Née'), 1, 0)
@@ -93,6 +88,9 @@ desc               <- gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", desc, perl=TRUE)
 # Remove all before and up to ":":
 output$description <- gsub(".*Projets de loi Biographie ","",desc)
 rm(list=setdiff(ls(), 'output'))
+} else {
+    output <- read.csv('data/output.csv', stringsAsFactors = F)
+}
 
 # Extract DTM -------------------------------------------------------------
 temp <- corpus(output$desc)
