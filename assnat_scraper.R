@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-08-16 22:05:41
+# Modified:     2016-08-17 16:45:40
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -14,9 +14,10 @@
 #TODO: extract DTMs
 #TODO: extract party
 
+library(quanteda)
 library(rvest)
 
-scrape <- T
+scrape <- FALSE
 
 if (scrape == T) {
 base <- 'http://www.assnat.qc.ca'
@@ -40,6 +41,8 @@ for(i in 1:length(page_names)) {
 }
 # Extract HTML Content for each MP Personal Page
 mp_pages       <- lapply(output$mp_url, read_html)
+} else {
+    output <- read.csv('data/output.csv')
 }
 
 # Extracting Year Variables -----------------------------------------------
@@ -50,15 +53,12 @@ foo    <- function (x, search_str) {
   html_text
   return(temp)
 }
-
 substr_r <- function(x, n){
   substr(x, nchar(x)-n+1, nchar(x))
 }
-
 bar <- function (x) {
 ifelse(identical(x, character(0)), NA, x)
 }
-
 year_str   <- '.sansMarge'
 year       <- sapply(mp_pages, foo, year_str)
 year       <- sapply(year, bar)
@@ -79,7 +79,6 @@ rm(year,   year_str, yob, yod)
 bar <- function (x) {
 ifelse(identical(substr(x,1,3), 'Née'), 1, 0)
 }
-
 gender_str    <- 'h2+ p'
 gender        <- sapply(mp_pages,foo,gender_str)
 gender        <- sapply(gender, bar)
@@ -87,11 +86,21 @@ output$female <- gender
 rm(gender,gender_str,temp)
 
 # Extract description paragraphs ------------------------------------------
-i <- 6
-desc_str <- '.imbGauche'
-desc <- sapply(mp_pages, foo, desc_str)
-gender        <- sapply(mp_pages,foo,gender_str)
-gender        <- sapply(gender, bar)
-output$female <- gender
-rm(gender,gender_str,temp)
+desc_str           <- '.imbGauche'
+desc               <- sapply(mp_pages, foo, desc_str)
+desc               <- gsub("[\t\r\n]", "", desc)
+desc               <- gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", desc, perl=TRUE)
+# Remove all before and up to ":":
+output$description <- gsub(".*Projets de loi Biographie ","",desc)
+rm(list=setdiff(ls(), 'output'))
 
+# Extract DTM -------------------------------------------------------------
+temp <- corpus(output$desc)
+dtm  <- dfm(temp, ignoredFeatures=stopwords("french"), stem=TRUE,
+            language='french')
+
+plot(topfeatures(dtm, dim(dtm)[2]), log = "y", cex = .6, ylab = "Term frequency")
+topfeatures(dtm, 20)
+if (require(RColorBrewer))
+    plot(dtm, max.words = 100, colors = brewer.pal(6, "Dark2"), scale = c(8, .5))
+# Extract Parties ---------------------------------------------------------
