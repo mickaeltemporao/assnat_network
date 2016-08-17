@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-08-17 17:02:50
+# Modified:     2016-08-17 17:22:25
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -95,13 +95,23 @@ rm(list=setdiff(ls(), 'output'))
 }
 
 # Extract DFM -------------------------------------------------------------
-temp <- corpus(output$desc)
-tm  <- dfm(temp, ignoredFeatures=stopwords("french"), stem=TRUE,
-            language='french')
+# Prepare features dictionnary
+dict <- dictionary(list(
+  # Fils, Fille
+  son_of =c('fils', 'fille')#, #Remove to add more categories
+  )
+)
 
-plot(topfeatures(tm, dim(dtm)[2]), log = "y", cex = .6, ylab = "Term frequency")
-topfeatures(tm, 20)
-if (require(RColorBrewer))
-    plot(tm, max.words = 100, colors = brewer.pal(6, "Dark2"), scale = c(8, .5))
+temp <- corpus(output$desc)
+tm  <- dfm(temp, ignoredFeatures=stopwords("french"), stem=F,
+            language='french', dictionary = dict)
+topfeatures(tm, 50)
+
+son_of <- as.data.frame(tm)
+output$son <- ifelse(son_of[1] == 0, 0, 1)
+
+# Extract families --------------------------------------------------------
+
+match(c('fils', 'fille', 1:3)
 
 # Extract Parties ---------------------------------------------------------
