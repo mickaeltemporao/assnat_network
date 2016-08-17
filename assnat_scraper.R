@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-08-17 16:45:40
+# Modified:     2016-08-17 16:51:27
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -20,27 +20,27 @@ library(rvest)
 scrape <- FALSE
 
 if (scrape == T) {
-base <- 'http://www.assnat.qc.ca'
-url  <- read_html('http://www.assnat.qc.ca/fr/membres/notices/index.html')
-#
-az_urls <- url %>%
-  html_nodes("p a") %>%
-  html_attr('href') %>%
-  paste0(base, .) %>%
-  .[-1]
-page_names <- lapply(az_urls, read_html)
-# Get MP Names & URLS -----------------------------------------------------
-temp           <- NULL
-output         <- NULL
-for(i in 1:length(page_names)) {
-  page_i       <- page_names[[i]]
-  mp_name      <- page_i %>% html_nodes('.imbGauche div a') %>% html_text
-  mp_url       <- page_i %>% html_nodes('.imbGauche div a') %>% html_attr('href') %>% paste0(base, .)
-  temp         <- data.frame(mp_name, mp_url, stringsAsFactors=F)
-  output       <- rbind(output, temp)
-}
-# Extract HTML Content for each MP Personal Page
-mp_pages       <- lapply(output$mp_url, read_html)
+  base <- 'http://www.assnat.qc.ca'
+  url  <- read_html('http://www.assnat.qc.ca/fr/membres/notices/index.html')
+  #
+  az_urls <- url %>%
+    html_nodes("p a") %>%
+    html_attr('href') %>%
+    paste0(base, .) %>%
+    .[-1]
+  page_names <- lapply(az_urls, read_html)
+  # Get MP Names & URLS -----------------------------------------------------
+  temp   <- NULL
+  output <- NULL
+  for(i in 1:length(page_names)) {
+    page_i    <- page_names[[i]]
+      mp_name <- page_i %>% html_nodes('.imbGauche div a') %>% html_text
+      mp_url  <- page_i %>% html_nodes('.imbGauche div a') %>% html_attr('href') %>% paste0(base, .)
+    temp      <- data.frame(mp_name, mp_url, stringsAsFactors=F)
+    output    <- rbind(output, temp)
+  }
+  # Extract HTML Content for each MP Personal Page
+  mp_pages <- lapply(output$mp_url, read_html)
 } else {
     output <- read.csv('data/output.csv')
 }
@@ -103,4 +103,5 @@ plot(topfeatures(dtm, dim(dtm)[2]), log = "y", cex = .6, ylab = "Term frequency"
 topfeatures(dtm, 20)
 if (require(RColorBrewer))
     plot(dtm, max.words = 100, colors = brewer.pal(6, "Dark2"), scale = c(8, .5))
+
 # Extract Parties ---------------------------------------------------------
