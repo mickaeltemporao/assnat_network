@@ -5,12 +5,15 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-08-14 19:53:22
+# Modified:     2016-08-16 22:05:41
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
 # Licensed under the GPL-2 < https://www.gnu.org/licenses/gpl-2.0.txt >
 # ------------------------------------------------------------------------------
+#TODO: extract DTMs
+#TODO: extract party
+
 library(rvest)
 
 scrape <- T
@@ -18,16 +21,14 @@ scrape <- T
 if (scrape == T) {
 base <- 'http://www.assnat.qc.ca'
 url  <- read_html('http://www.assnat.qc.ca/fr/membres/notices/index.html')
-
+#
 az_urls <- url %>%
   html_nodes("p a") %>%
   html_attr('href') %>%
   paste0(base, .) %>%
   .[-1]
-
 page_names <- lapply(az_urls, read_html)
-
-# Get MP Names & URLS
+# Get MP Names & URLS -----------------------------------------------------
 temp           <- NULL
 output         <- NULL
 for(i in 1:length(page_names)) {
@@ -39,14 +40,10 @@ for(i in 1:length(page_names)) {
 }
 # Extract HTML Content for each MP Personal Page
 mp_pages       <- lapply(output$mp_url, read_html)
-# Save mp_pages
-save(mp_pages, file="data/mp_pages.RData")
 }
 
-load("data/mp_pages.RData")
-
+# Extracting Year Variables -----------------------------------------------
 #TODO: rename funs
-# Extract YOB & YOD
 year   <- NULL
 foo    <- function (x, search_str) {
   temp <- x %>% html_nodes(search_str) %>%
@@ -62,7 +59,6 @@ bar <- function (x) {
 ifelse(identical(x, character(0)), NA, x)
 }
 
-# Extracting Year Variables
 year_str   <- '.sansMarge'
 year       <- sapply(mp_pages, foo, year_str)
 year       <- sapply(year, bar)
@@ -79,7 +75,7 @@ output$yod <- yod
 rm(year,   year_str, yob, yod)
 #TODO: get year for similars to output[2540,]
 
-# Extraction of Gender Variable
+# Extraction of Gender Variable -------------------------------------------
 bar <- function (x) {
 ifelse(identical(substr(x,1,3), 'Née'), 1, 0)
 }
@@ -90,7 +86,12 @@ gender        <- sapply(gender, bar)
 output$female <- gender
 rm(gender,gender_str,temp)
 
-#TODO: extract gender
-#TODO: extract party
-#TODO: extract descriptions
-#TODO: extract DTMs
+# Extract description paragraphs ------------------------------------------
+i <- 6
+desc_str <- '.imbGauche'
+desc <- sapply(mp_pages, foo, desc_str)
+gender        <- sapply(mp_pages,foo,gender_str)
+gender        <- sapply(gender, bar)
+output$female <- gender
+rm(gender,gender_str,temp)
+
