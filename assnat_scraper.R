@@ -5,14 +5,16 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-08-17 16:54:24
+# Modified:     2016-08-17 17:02:50
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
 # Licensed under the GPL-2 < https://www.gnu.org/licenses/gpl-2.0.txt >
 # ------------------------------------------------------------------------------
-#TODO: extract DTMs
+#TODO: extract family nodes
+#TODO: clean dfm
 #TODO: extract party
+
 
 library(quanteda)
 library(rvest)
@@ -92,14 +94,14 @@ rm(list=setdiff(ls(), 'output'))
     output <- read.csv('data/output.csv', stringsAsFactors = F)
 }
 
-# Extract DTM -------------------------------------------------------------
+# Extract DFM -------------------------------------------------------------
 temp <- corpus(output$desc)
-dtm  <- dfm(temp, ignoredFeatures=stopwords("french"), stem=TRUE,
+tm  <- dfm(temp, ignoredFeatures=stopwords("french"), stem=TRUE,
             language='french')
 
-plot(topfeatures(dtm, dim(dtm)[2]), log = "y", cex = .6, ylab = "Term frequency")
-topfeatures(dtm, 20)
+plot(topfeatures(tm, dim(dtm)[2]), log = "y", cex = .6, ylab = "Term frequency")
+topfeatures(tm, 20)
 if (require(RColorBrewer))
-    plot(dtm, max.words = 100, colors = brewer.pal(6, "Dark2"), scale = c(8, .5))
+    plot(tm, max.words = 100, colors = brewer.pal(6, "Dark2"), scale = c(8, .5))
 
 # Extract Parties ---------------------------------------------------------
