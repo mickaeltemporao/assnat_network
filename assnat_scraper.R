@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-08-17 17:22:25
+# Modified:     2016-08-18 07:36:53
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -13,8 +13,8 @@
 # ------------------------------------------------------------------------------
 #TODO: extract family nodes
 #TODO: clean dfm
+#TODO: create party dictionnary
 #TODO: extract party
-
 
 library(quanteda)
 library(rvest)
@@ -81,7 +81,6 @@ gender        <- sapply(mp_pages,foo,gender_str)
 gender        <- sapply(gender, bar)
 output$female <- gender
 rm(gender,gender_str,temp)
-
 # Extract description paragraphs ------------------------------------------
 desc_str           <- '.imbGauche'
 desc               <- sapply(mp_pages, foo, desc_str)
@@ -96,22 +95,17 @@ rm(list=setdiff(ls(), 'output'))
 
 # Extract DFM -------------------------------------------------------------
 # Prepare features dictionnary
-dict <- dictionary(list(
-  # Fils, Fille
-  son_of =c('fils', 'fille')#, #Remove to add more categories
-  )
-)
+source("data/assnat.dict")
 
 temp <- corpus(output$desc)
 tm  <- dfm(temp, ignoredFeatures=stopwords("french"), stem=F,
-            language='french', dictionary = dict)
+            language='french', dictionary = assnat)
 topfeatures(tm, 50)
 
-son_of <- as.data.frame(tm)
-output$son <- ifelse(son_of[1] == 0, 0, 1)
+feats <- as.data.frame(tm)
+mean(feats[,2])
+output$child <- ifelse(feats[1] == 0, 0, 1)
 
 # Extract families --------------------------------------------------------
-
-match(c('fils', 'fille', 1:3)
 
 # Extract Parties ---------------------------------------------------------
