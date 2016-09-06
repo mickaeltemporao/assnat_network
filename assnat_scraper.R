@@ -5,21 +5,24 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-08-18 07:36:53
+# Modified:     2016-09-06 19:36:44
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
 # Licensed under the GPL-2 < https://www.gnu.org/licenses/gpl-2.0.txt >
 # ------------------------------------------------------------------------------
-#TODO: extract family nodes
-#TODO: clean dfm
-#TODO: create party dictionnary
+#TODO: extract family nodes  -> test sur papineau
+#TODO: clean dfm ok
 #TODO: extract party
+#TODO: fille / fils au lieu de 0/1
+#TODO: extract 1st elected year
+#TODO: remove diacritics + lowercase
+
 
 library(quanteda)
 library(rvest)
 
-scrape <- FALSE
+scrape <- F
 
 if (scrape == T) {
   base <- 'http://www.assnat.qc.ca'
@@ -98,8 +101,9 @@ rm(list=setdiff(ls(), 'output'))
 source("data/assnat.dict")
 
 temp <- corpus(output$desc)
-tm  <- dfm(temp, ignoredFeatures=stopwords("french"), stem=F,
+tm <- dfm(temp, ignoredFeatures=stopwords("french"), stem=F,
             language='french', dictionary = assnat)
+
 topfeatures(tm, 50)
 
 feats <- as.data.frame(tm)
@@ -107,5 +111,5 @@ mean(feats[,2])
 output$child <- ifelse(feats[1] == 0, 0, 1)
 
 # Extract families --------------------------------------------------------
-
+fam_str <- 'p a'
 # Extract Parties ---------------------------------------------------------
