@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-09-07 06:43:45
+# Modified:     2016-09-07 12:52:56
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -45,7 +45,7 @@ if (scrape == T) {
     output    <- rbind(output, temp)
   }
   # Create Unique ID
-  output$ID <- 1:length(output$mp_name)
+  output$mp_id <- paste0('mp_', 1:length(output$mp_name))
   # Extract HTML Content for each MP Personal Page
   # test <- read_html("http://www.assnat.qc.ca/fr/deputes/papineau-louis-joseph-4735/biographie.html")
   mp_pages <- lapply(output$mp_url, read_html)
