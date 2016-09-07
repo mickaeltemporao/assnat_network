@@ -5,7 +5,7 @@
 # Description:  TODO: (write me)
 # Version:      0.0.0.000
 # Created:      2016-09-07 06:32:53
-# Modified:     2016-09-07 10:00:34
+# Modified:     2016-09-07 12:26:41
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -15,8 +15,8 @@ library(quanteda)
 library(rvest)
 library(stringr)
 
-test <- read_html("http://www.assnat.qc.ca/fr/deputes/papineau-louis-joseph-4735/biographie.html")
-test <- read_html(output$mp_url[2540])
+test1 <- read_html("http://www.assnat.qc.ca/fr/deputes/papineau-louis-joseph-4735/biographie.html")
+test2 <- read_html(output$mp_url[2540])
 
 to_plain <- function(s) {
 # Converts all accented characters to plain text
@@ -92,28 +92,17 @@ get_year(test, 2)
 # PARTY
 source("src/party.R")
 get_party <- function (x) {
-  x <- test
   x <- tolower(get_desc(x))
   x <- to_plain(x)
   x <- sentences <- unlist(strsplit(x, ". ", fixed=T))
+  mp_parties <- as.data.frame(setNames(replicate(length(party),numeric(0), simplify = F), abv_party))
   for (i in party) {
-    if (grep(i, x, fixed=TRUE)>=0) {
-      grep(i, x, fixed=TRUE
-
-yod_sent <- sentences[grep('Décédé', sentences)]
-      yod <- as.numeric(
-        grep('[0-9]{4}',
-          gsub(',','',
-            unlist(
-              strsplit(yod_sent, split=' '))),
-          value=T))
-    }
-    else (identical(grep(i, x, fixed=TRUE), integer(0))) {
-    0
-    }
-
-
+    mp_parties[1,match(i,party)]  <- ifelse(identical(grep(i, x, fixed=TRUE), integer(0)),0,1)
   }
+  return(mp_parties)
 }
 
+get_party(test2)
+
+unlist(str_extract_all(x, paste(party, collapse='|')))
 # LINKS
