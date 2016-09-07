@@ -5,7 +5,7 @@
 # Description:  TODO: (write me)
 # Version:      0.0.0.000
 # Created:      2016-09-07 06:32:53
-# Modified:     2016-09-07 12:26:41
+# Modified:     2016-09-07 12:47:07
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -49,6 +49,7 @@ get_desc(test)
 
 # FEMALE
 get_gender <- function (x) {
+# Returns 1 if female; 0 if male
   x <- get_desc(x)
   ifelse(identical(substr(x,1,3), 'Née'), 1, 0)
 }
@@ -92,6 +93,7 @@ get_year(test, 2)
 # PARTY
 source("src/party.R")
 get_party <- function (x) {
+# Returns a data.frame of parties
   x <- tolower(get_desc(x))
   x <- to_plain(x)
   x <- sentences <- unlist(strsplit(x, ". ", fixed=T))
@@ -101,8 +103,12 @@ get_party <- function (x) {
   }
   return(mp_parties)
 }
-
 get_party(test2)
 
-unlist(str_extract_all(x, paste(party, collapse='|')))
 # LINKS
+source('src/links.R')
+get_links <- function (x) {
+
+}
+
+unlist(str_extract_all(x, paste(party, collapse='|')))
