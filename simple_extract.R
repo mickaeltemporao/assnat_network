@@ -5,7 +5,7 @@
 # Description:  TODO: (write me)
 # Version:      0.0.0.000
 # Created:      2016-09-07 06:32:53
-# Modified:     2016-09-07 08:34:24
+# Modified:     2016-09-07 08:48:24
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -16,6 +16,7 @@ library(rvest)
 library(stringr)
 
 test <- read_html("http://www.assnat.qc.ca/fr/deputes/papineau-louis-joseph-4735/biographie.html")
+test <- read_html(output$mp_url[2540])
 
 # ID
 # NAME
@@ -29,7 +30,6 @@ get_desc <- function (x) {
   temp <- gsub(".*Projets de loi Biographie ","",temp)
   return(temp)
 }
-
 get_desc(test)
 
 # FEMALE
@@ -37,7 +37,6 @@ get_gender <- function (x) {
   x <- get_desc(x)
   ifelse(identical(substr(x,1,3), 'Née'), 1, 0)
 }
-
 get_gender(test)
 
 # YOB & YOD
@@ -56,22 +55,24 @@ get_year <- function (x, type) {
   return(yob)
   }
   if (type == 2) {
-  yod_sent <- sentences[grep('Décédé', sentences)]
-  yod <- as.numeric(
-    grep('[0-9]{4}',
-      gsub(',','',
-        unlist(
-          strsplit(yod_sent, split=' '))),
-      value=T))
-  return(yod)
+    if (identical(sentences[grep('Décédé', sentences)], character(0))) {
+      yod <- NA
+      return(yod)
+    } else {
+      yod_sent <- sentences[grep('Décédé', sentences)]
+      yod <- as.numeric(
+        grep('[0-9]{4}',
+          gsub(',','',
+            unlist(
+              strsplit(yod_sent, split=' '))),
+          value=T))
+      return(yod)
+    }
   } else {
   print(paste0('Choose between: 1 = Year of Birth; 2 = Year of Death'))
   }
 }
-
 get_year(test, 2)
-
-#TODO: get year for similars to output[2540,]
 
 # PARTY
 
