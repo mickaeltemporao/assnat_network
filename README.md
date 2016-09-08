@@ -39,6 +39,6 @@
     - un   = 'Union nationale',
     - uq   = 'Unité-Québec'
 
-TODO : fix non extracted YOB & YOD
+TODO: fix non extracted YOB & YOD
 
-TODO : replace mp_n by family ties
+TODO: Family ties instead of connection

@@ -5,18 +5,12 @@
 # Description:  Dynasty Network Scraper
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2016-09-08 11:42:55
+# Modified:     2016-09-08 16:42:00
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
 # Licensed under the GPL-2 < https://www.gnu.org/licenses/gpl-2.0.txt >
 # ------------------------------------------------------------------------------
-#TODO: extract family nodes  -> test sur papineau
-#TODO: clean dfm ok
-#TODO: extract party
-#TODO: fille / fils au lieu de 0/1
-#TODO: extract 1st elected year
-#TODO: remove diacritics + lowercase
 library(stringr)
 library(rvest)
 
@@ -47,6 +41,7 @@ if (scrape == T) {
   # Extract HTML Content for each MP Personal Page
   # test <- read_html("http://www.assnat.qc.ca/fr/deputes/papineau-louis-joseph-4735/biographie.html")
   mp_pages <- lapply(output$mp_url, read_html)
+
 # Extracting Year Variables -----------------------------------------------
 #TODO: rename funs
 year   <- NULL
@@ -91,6 +86,7 @@ desc               <- sapply(mp_pages, foo, desc_str)
 desc               <- gsub("[\t\r\n]", "", desc)
 desc               <- gsub("(?<=[\\s])\\s*|^\\s+|\\s+$", "", desc, perl=TRUE)
 # Remove all before and up to ":":
+
 output$description <- gsub(".*Projets de loi Biographie ","",desc)
 rm(list=setdiff(ls(), 'output'))
 } else {
