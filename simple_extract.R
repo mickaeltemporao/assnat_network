@@ -5,7 +5,7 @@
 # Description:  TODO: (write me)
 # Version:      0.0.0.000
 # Created:      2016-09-07 06:32:53
-# Modified:     2016-09-08 08:56:58
+# Modified:     2016-09-08 09:09:16
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -19,6 +19,7 @@ library(pbapply)
 # NAME
 # URL
 test <- read_html("http://www.assnat.qc.ca/fr/deputes/papineau-louis-joseph-4735/biographie.html")
+output <- read.csv('data/output.csv', stringsAsFactors=F)
 
 to_plain <- function(s) {
 # Converts all accented characters to plain text
@@ -91,18 +92,9 @@ get_year(test, 1)
 
 # PARTY
 source("src/party.R")
-get_party <- function (x) {
-# Returns a data.frame of parties
-  x <- tolower(get_desc(x))
-  x <- to_plain(x)
-  x <- unlist(strsplit(x, ". ", fixed=T))
-  mp_parties <- as.data.frame(setNames(replicate(length(party),numeric(0), simplify = F), abv_party))
-  for (i in party) {
-    mp_parties[1,match(i,party)]  <- ifelse(identical(grep(i, x, fixed=TRUE), integer(0)),0,1)
-  }
-  return(mp_parties)
+for (i in 1:length(party)) {
+output[[paste0('party_', abv_party[i])]] <- as.numeric(grepl(party[1], output$mp_desc))
 }
-get_party(test)
 
 # Temporary mp_names and id creation
 output <- read.csv('data/output.csv', stringsAsFactors=F)
@@ -156,8 +148,6 @@ get_links(test)
 ########
 
 ########
-
-source("src/party.R")
 mp_parties <- as.data.frame(setNames(replicate(length(party),numeric(0), simplify = F), abv_party))
 output <- dplyr::bind_rows(output, mp_parties)
 out <- as.data.frame(setNames(replicate(length(mp_names),character(0), simplify = F), output$mp_id), stringsAsFactors=F)
