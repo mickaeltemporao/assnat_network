@@ -5,7 +5,7 @@
 # Description:  TODO: (write me)
 # Version:      0.0.0.000
 # Created:      2016-09-07 06:32:53
-# Modified:     2016-09-08 11:00:23
+# Modified:     2016-09-08 11:05:20
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -139,9 +139,8 @@ for (i in 1:length(links)) {
 for (i in 1:length(output$mp_id)) {
   output[[paste0('mp_', i)]] <- as.numeric(grepl(output$mp_name[i], output$mp_link_sent))
 }
-
-output <- dplyr::select(output, 1:6, mp_link_sent, mp_desc, dplyr::everything())
 rm(links, x, i, sentences)
+
 # get_links <- function (x) {
 #   x1 <- tolower(get_desc(x))
 #   x1 <- to_plain(x1)
@@ -166,3 +165,7 @@ for (i in 1:length(output$mp_desc)) {
   first_year_sent <- x[unlist(grep('elu', x))[1]]
   output$elected_year[i] <- as.numeric(str_extract(first_year_sent, '[0-9]{4}'))
 }
+rm(i, x, first_year_sent)
+
+output <- dplyr::select(output, 1:6, elected_year, mp_link_sent, mp_desc, dplyr::everything())
+#write.csv(output, 'data/20160908_assnat.csv', row.names=F)

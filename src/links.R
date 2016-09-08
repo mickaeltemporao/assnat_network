@@ -5,7 +5,7 @@
 # Description:  TODO: (write me)
 # Version:      0.0.0.000
 # Created:      2016-08-18 07:23:02
-# Modified:     2016-09-07 12:42:18
+# Modified:     2016-09-08 09:16:36
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -24,7 +24,9 @@ links <- c(
   'fille',
   'fils',
   'frere',
-  'mari',
+  'grand-pere',
+  'grand-mere',
+  'mari ',
   'mere',
   'neveu',
   'niece',
@@ -33,5 +35,5 @@ links <- c(
   'petit-fils',
   'petite-fille',
   'soeur',
-  'tante',
+  'tante'
 )
