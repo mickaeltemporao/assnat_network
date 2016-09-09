@@ -46,3 +46,5 @@ TODO: Family ties instead of connection
 TODO: fix dots for names and cities in desc
 
 TODO: Divide assnat_scraper into a scraper file and variable creation file from harvested content
+
+TODO: Add all useful functions to src/funs.R
