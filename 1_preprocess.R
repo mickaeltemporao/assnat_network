@@ -1,11 +1,11 @@
 #!/usr/bin/env Rscript
 # ------------------------------------------------------------------------------
-# Title:        TODO: (add title)
-# Filename:     easy_harvest.R
-# Description:  TODO: (write me)
+# Title:        Preprocess Assnat Data
+# Filename:     1_preprocess.R
+# Description:  Create and recode Assnat relevant variables
 # Version:      0.0.0.000
 # Created:      2016-09-08 10:43:02
-# Modified:     2016-09-09 16:53:07
+# Modified:     2016-09-21 09:39:38
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
