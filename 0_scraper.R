@@ -5,7 +5,7 @@
 # Description:  Dynasty Network Data Generator
 # Version:      0.0.0.000
 # Created:      2016-05-20 14:19:50
-# Modified:     2017-04-04 07:01:45
+# Modified:     2017-04-04 07:03:17
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
@@ -50,3 +50,4 @@ output$mp_desc <- sapply(mp_pages, get_desc)
 output$mp_desc <- to_plain(tolower(description))
 rm(list=setdiff(ls(), 'output'))
 gc()
+saveRDS(output, "assnat_ntw.rds", compress="xz")
