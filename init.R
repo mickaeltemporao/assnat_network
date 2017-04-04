@@ -5,13 +5,13 @@
 # Description:  Create and recode Assnat relevant variables
 # Version:      0.0.0.000
 # Created:      2016-09-08 10:43:02
-# Modified:     2017-04-04 06:59:53
+# Modified:     2017-04-04 07:03:39
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
 # Licensed under the GPL-2 < https://www.gnu.org/licenses/gpl-2.0.txt >
 # ------------------------------------------------------------------------------
-output <- try(read.csv("assnat_ntw.csv"), silent=T)
+output <- try(readRDS("assnat_ntw.rds"), silent=T)
 
 if (class(output) == "try-error") {
   source("src/assnat_scraper.R")
@@ -104,4 +104,4 @@ for (i in 1:length(output$mp_desc)) {
 
 rm(list=setdiff(ls(), 'output'))
 output <- dplyr::select(output, 1:6, elected_year, mp_link_sent, mp_desc, dplyr::everything())
-#write.csv(output, 'data/20160908_assnat.csv', row.names=F)
+write.csv(output, 'assnat_network.csv', row.names=F)
