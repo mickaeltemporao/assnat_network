@@ -5,14 +5,17 @@
 # Description:  Create and recode Assnat relevant variables
 # Version:      0.0.0.000
 # Created:      2016-09-08 10:43:02
-# Modified:     2016-09-21 09:39:38
+# Modified:     2017-04-04 06:59:53
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
 # Licensed under the GPL-2 < https://www.gnu.org/licenses/gpl-2.0.txt >
 # ------------------------------------------------------------------------------
-output <- read.csv('data/output.csv')
+output <- try(read.csv("assnat_ntw.csv"), silent=T)
 
+if (class(output) == "try-error") {
+  source("src/assnat_scraper.R")
+}
 
 # NAME # Temporary mp_names to match mp descriptions
 mp_names <- tolower(output$mp_name)
@@ -21,20 +24,6 @@ mp_names <- gsub(',.', ',', mp_names)
 for (i in 1:length(mp_names)) {
   mp_names[i] <- paste(unlist(str_split(mp_names[i], ","))[-1], unlist(str_split(mp_names[i], ","))[1])
 }
-# mp_names <- NULL
-# mp_names <- character(length(output$mp_name))
-# for (i in 1:length(mp_names)) {
-#   if (identical(grep('patrimoine', output$mp_url[i]), integer(0))) {
-#     mp_names[i] <- output$mp_url[i] %>% read_html %>%
-#     html_nodes('.enteteFicheDepute h1') %>%
-#     html_text
-#   } else {
-#     mp_names[i] <- output$mp_url[i] %>% read_html %>%
-#     html_nodes('.imbGauche h1') %>%
-#     html_text
-#   }
-# }
-
 
 # FEMALE
 get_gender <- function (x) {
@@ -42,7 +31,6 @@ get_gender <- function (x) {
   x <- get_desc(x)
   ifelse(identical(substr(x,1,3), 'nee'), 1, 0)
 }
-
 
 # YOB & YOD
 get_year <- function (x, type) {
