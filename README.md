@@ -38,13 +38,9 @@
     - pc   = 'Parti créditiste',
     - un   = 'Union nationale',
     - uq   = 'Unité-Québec'
-
-TODO: fix non extracted YOB & YOD
-
-TODO: Family ties instead of connection
-
-TODO: fix dots for names and cities in desc
-
-TODO: Divide assnat_scraper into a scraper file and variable creation file from harvested content
-
-TODO: Add all useful functions to src/funs.R
+## TODO:
+- [ ] fix non extracted YOB & YOD
+- [ ] Family ties instead of connection
+- [ ] fix dots for names and cities in desc
+- [ ] Divide assnat_scraper into a scraper file and variable creation file from harvested content
+- [ ] Add all useful functions to src/funs.R
