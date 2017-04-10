@@ -1,23 +1,24 @@
 #!/usr/bin/env Rscript
 # ------------------------------------------------------------------------------
 # Title:        Preprocess Assnat Data
-# Filename:     1_preprocess.R
-# Description:  Create and recode Assnat relevant variables
+# Filename:     init.R
+# Description:  Initiates the preprocess of the assnat data
 # Version:      0.0.0.000
 # Created:      2016-09-08 10:43:02
-# Modified:     2017-04-04 07:03:39
+# Modified:     2017-04-09 20:26:34
 # Author:       Mickael Temporão < mickael.temporao.1 at ulaval.ca >
 # ------------------------------------------------------------------------------
 # Copyright (C) 2016 Mickael Temporão
 # Licensed under the GPL-2 < https://www.gnu.org/licenses/gpl-2.0.txt >
 # ------------------------------------------------------------------------------
-output <- try(readRDS("assnat_ntw.rds"), silent=T)
+output <- try(readRDS("data/assnat_ntw.rds"), silent=T)
 
 if (class(output) == "try-error") {
   source("src/assnat_scraper.R")
 }
 
 # NAME # Temporary mp_names to match mp descriptions
+source('src/funs.R')
 mp_names <- tolower(output$mp_name)
 mp_names <- to_plain(mp_names)
 mp_names <- gsub(',.', ',', mp_names)
@@ -85,7 +86,6 @@ for (i in 1:length(output$mp_desc)) {
 }
 for (i in 1:length(links)) {
   output[[paste0('link_', links[i])]] <- as.numeric(grepl(links[i], output$mp_link_sent))
-  # output[[paste0('link_', unlist(str_extract_all(output$mp_link_sent, paste(links, collapse='|'))))]] <- 1
 }
 for (i in 1:length(output$mp_id)) {
   output[[paste0('mp_', i)]] <- as.numeric(grepl(output$mp_name[i], output$mp_link_sent))
@@ -104,4 +104,8 @@ for (i in 1:length(output$mp_desc)) {
 
 rm(list=setdiff(ls(), 'output'))
 output <- dplyr::select(output, 1:6, elected_year, mp_link_sent, mp_desc, dplyr::everything())
-write.csv(output, 'assnat_network.csv', row.names=F)
+message("Creating and saving output in the data folder.")
+dir.create(file.path("data"), showWarnings = FALSE)
+saveRDS(output, 'data/assnat_network.rds', compress="xz")
+message("Scraping and cleaning process complete!")
+Sys.sleep(5)
